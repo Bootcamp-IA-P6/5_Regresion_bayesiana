@@ -142,6 +142,9 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
+dataset/*.csv
+*.csv
+.venv/
 # mkdocs documentation
 /site
 
