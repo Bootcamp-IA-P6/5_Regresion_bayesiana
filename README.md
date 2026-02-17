@@ -108,6 +108,3 @@ El proyecto incluye tests para:
 - [ArviZ Documentation](https://arviz-devs.github.io/arviz/)
 
 ---
-**Autor**: Modelo 4 - Regresión Bayesiana  
-**Framework**: PyMC + Streamlit  
-**Fecha**: 2026  
