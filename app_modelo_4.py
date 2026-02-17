@@ -23,19 +23,18 @@ st.markdown("---")
 def load_model_artifacts():
     try:
         scaler = joblib.load('modelo_4_scaler.pkl')
-        with open('modelo_4_trace.pkl', 'rb') as f:
-            trace = pickle.load(f)
+        model = joblib.load('modelo_4_trace.pkl')  # Modelo sklearn BayesianRidge
         with open('modelo_4_results.pkl', 'rb') as f:
             results = pickle.load(f)
-        return scaler, trace, results
+        return scaler, model, results
     except FileNotFoundError:
         return None, None, None
 
 # Cargar artefactos
-scaler, trace, results = load_model_artifacts()
+scaler, model, results = load_model_artifacts()
 
 if scaler is None:
-    st.error("❌ No se encontraron los archivos del modelo. Por favor, ejecuta primero el notebook de entrenamiento.")
+    st.error("❌ No se encontraron los archivos del modelo. Por favor, ejecuta primero el script de entrenamiento.")
     st.stop()
 
 # Sidebar para inputs
@@ -80,17 +79,9 @@ with col1:
         input_data = np.array([[discounted_price, quantity_sold, rating]])
         input_scaled = scaler.transform(input_data)
         
-        # Hacer predicción (simulada - en un caso real usaríamos el modelo PyMC)
-        # Por simplicidad, calculamos usando los coeficientes promedio
-        if results:
-            feature_importance = pd.DataFrame(results['feature_importance'])
-            coeffs = feature_importance['Coefficient_Mean'].values
-            
-            # Predicción simple
-            prediction = coeffs[0] * input_scaled[0, 0] + coeffs[1] * input_scaled[0, 1] + coeffs[2] * input_scaled[0, 2]
-            
-            # Agregar intercept (asumiendo 0 para simplicidad)
-            prediction = abs(prediction * 100)  # Escalado para hacer más realista
+        # Hacer predicción usando el modelo sklearn
+        if model and results:
+            prediction = model.predict(input_scaled)[0]
             
             st.success(f"💵 **Revenue Predicho: ${prediction:.2f}**")
             
@@ -102,7 +93,7 @@ with col1:
             - ⭐ Rating: {rating:.1f}
             """)
         else:
-            st.error("Error al cargar los resultados del modelo")
+            st.error("Error al cargar el modelo")
     else:
         st.info("👈 Ajusta los parámetros en la barra lateral y presiona 'Predecir Revenue'")
 

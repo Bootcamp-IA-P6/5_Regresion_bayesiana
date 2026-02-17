@@ -60,6 +60,7 @@ python test_modelo_4.py
 
 ```
 ├── modelo_4_bayesian.ipynb    # Notebook principal del modelo
+├── train_modelo_4.py          # Script de entrenamiento PyMC
 ├── app_modelo_4.py           # Aplicación Streamlit  
 ├── test_modelo_4.py          # Tests unitarios
 ├── dataset/
