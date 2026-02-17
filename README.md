@@ -1,1 +1,113 @@
-# 5_Regresion_bayesiana
+# 🛍️ Modelo 4: Regresión Bayesiana - Amazon Sales Dataset
+
+## 📋 Descripción del Proyecto
+
+Este proyecto implementa un **modelo de regresión bayesiana** para predecir el `total_revenue` de productos de Amazon utilizando técnicas de inferencia bayesiana con PyMC.
+
+### 🎯 Objetivos (Nivel Esencial)
+
+✅ **Modelo ML funcional** que predice una variable numérica (total_revenue)  
+✅ **EDA completo** con visualizaciones relevantes para regresión  
+✅ **Overfitting < 5%** entre métricas de entrenamiento y validación  
+✅ **Solución productizada** con Streamlit  
+✅ **Informe de rendimiento** con métricas de regresión (RMSE, MAE, R²)  
+
+## 📊 Dataset
+
+El dataset de Amazon Sales contiene las siguientes columnas relevantes:
+- `discounted_price`: Precio del producto con descuento
+- `quantity_sold`: Cantidad vendida del producto  
+- `rating`: Calificación del producto (1-5)
+- `total_revenue`: **Variable objetivo** - Revenue total generado
+
+## 🚀 Instalación y Uso
+
+### 1. Instalar dependencias
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Ejecutar el modelo
+```bash
+jupyter notebook modelo_4_bayesian.ipynb
+```
+
+### 3. Ejecutar la aplicación web
+```bash
+streamlit run app_modelo_4.py
+```
+
+### 4. Ejecutar tests
+```bash
+python test_modelo_4.py
+```
+
+## 🧠 Metodología
+
+### Modelo Bayesiano
+- **Framework**: PyMC para inferencia bayesiana
+- **Tipo**: Regresión lineal bayesiana
+- **Features**: discounted_price, quantity_sold, rating
+- **Priors**: Normal(0, 10) para coeficientes, HalfNormal(10) para sigma
+
+### Métricas de Evaluación
+- **RMSE**: Root Mean Square Error
+- **MAE**: Mean Absolute Error  
+- **R²**: Coeficiente de determinación
+- **Control de overfitting**: Diferencia < 5% entre train/test
+
+## 📁 Estructura del Proyecto
+
+```
+├── modelo_4_bayesian.ipynb    # Notebook principal del modelo
+├── app_modelo_4.py           # Aplicación Streamlit  
+├── test_modelo_4.py          # Tests unitarios
+├── dataset/
+│   └── amazon_sales_dataset.csv
+├── requirements.txt          # Dependencias
+└── README.md                # Este archivo
+```
+
+## 🔧 Archivos Generados
+
+El modelo genera los siguientes archivos al entrenar:
+- `modelo_4_scaler.pkl`: Scaler para normalización
+- `modelo_4_trace.pkl`: Trace del modelo PyMC
+- `modelo_4_results.pkl`: Métricas y resultados
+
+## 📈 Resultados Esperados
+
+- **R² > 0.8**: Buena capacidad predictiva
+- **Overfitting < 5%**: Modelo generalizable
+- **RMSE bajo**: Errores mínimos en predicciones
+- **Intervalos de credibilidad**: Cuantificación de incertidumbre
+
+## 🛠️ Tecnologías Utilizadas
+
+- **PyMC**: Probabilistic programming
+- **ArviZ**: Análisis bayesiano
+- **Streamlit**: Interface web
+- **Pandas/NumPy**: Manipulación de datos
+- **Matplotlib/Seaborn**: Visualización
+- **Scikit-learn**: Preprocesamiento y métricas
+
+## 🧪 Testing
+
+El proyecto incluye tests para:
+- ✅ Carga de datos
+- ✅ Validación de tipos
+- ✅ Rangos de valores
+- ✅ Lógica de correlaciones  
+- ✅ Valores nulos
+- ✅ Consistencia de datos
+
+## 📚 Referencias
+
+- [PyMC Documentation](https://docs.pymc.io/)
+- [Bayesian Analysis with Python](https://github.com/aloctavodia/BAP)
+- [ArviZ Documentation](https://arviz-devs.github.io/arviz/)
+
+---
+**Autor**: Modelo 4 - Regresión Bayesiana  
+**Framework**: PyMC + Streamlit  
+**Fecha**: 2026  
