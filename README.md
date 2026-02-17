@@ -27,9 +27,9 @@ El dataset de Amazon Sales contiene las siguientes columnas relevantes:
 pip install -r requirements.txt
 ```
 
-### 2. Ejecutar el modelo
+### 2. Entrenar el modelo
 ```bash
-jupyter notebook modelo_4_bayesian.ipynb
+python train_modelo_4.py
 ```
 
 ### 3. Ejecutar la aplicación web
@@ -40,6 +40,11 @@ streamlit run app_modelo_4.py
 ### 4. Ejecutar tests
 ```bash
 python test_modelo_4.py
+```
+
+### 5. Explorar el análisis completo
+```bash
+jupyter notebook modelo_4_bayesian.ipynb
 ```
 
 ## 🧠 Metodología
@@ -71,10 +76,21 @@ python test_modelo_4.py
 
 ## 🔧 Archivos Generados
 
-El modelo genera los siguientes archivos al entrenar:
-- `modelo_4_scaler.pkl`: Scaler para normalización
-- `modelo_4_trace.pkl`: Trace del modelo PyMC
-- `modelo_4_results.pkl`: Métricas y resultados
+Al entrenar el modelo con `python train_modelo_4.py`, se generan automáticamente:
+- `modelo_4_scaler.pkl`: Scaler para normalización de datos
+- `modelo_4_trace.pkl`: Modelo entrenado (BayesianRidge)
+- `modelo_4_results.pkl`: Métricas y resultados del entrenamiento
+
+⚠️ **Nota**: Estos archivos son necesarios para la aplicación Streamlit pero no se incluyen en el repositorio. Debes entrenar el modelo primero.
+
+## 📋 Workflow Recomendado
+
+1. **Clonar repositorio**: `git clone <repo-url>`
+2. **Instalar dependencias**: `pip install -r requirements.txt`  
+3. **Ejecutar tests**: `python test_modelo_4.py` (verificar datos)
+4. **Entrenar modelo**: `python train_modelo_4.py` (genera archivos .pkl)
+5. **Usar aplicación**: `streamlit run app_modelo_4.py`
+6. **Explorar análisis**: `jupyter notebook modelo_4_bayesian.ipynb`
 
 ## 📈 Resultados Esperados
 

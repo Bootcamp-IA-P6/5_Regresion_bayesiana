@@ -205,3 +205,7 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,windows
+
+# Model artifacts (generated files)
+*.pkl
+modelo_4_*.pkl
