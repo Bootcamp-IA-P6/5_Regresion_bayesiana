@@ -1,4 +1,12 @@
-# � Modelo 4: Regresión Poisson Bayesiana - Amazon Sales Dataset
+# Modelo 4: Regresion Poisson Bayesiana - Amazon Sales Dataset
+
+## Descripcion del Proyecto
+
+Este proyecto implementa un **modelo de regresion Poisson bayesiana** para predecir `quantity_sold` (cantidad vendida) de productos Amazon usando variables temporales y de descuento.
+
+### Objetivos (Nivel Esencial)4: Regresión Poisson Bayesiana - Amazon Sales Dataset
+
+## Descripción del Proyecto️ Modelo 4: Regresión Poisson Bayesiana - Amazon Sales Dataset � Modelo 4: Regresión Poisson Bayesiana - Amazon Sales Dataset
 
 ## 📋 Descripción del Proyecto
 
@@ -6,25 +14,25 @@ Este proyecto implementa un **modelo de regresión Poisson bayesiana** para pred
 
 ### 🎯 Objetivos (Nivel Esencial)
 
-✅ **Modelo ML funcional** que predice cantidad vendida (distribución Poisson)  
-✅ **EDA completo** con análisis de sobredispersión y patrones temporales  
-✅ **Overfitting < 5%** entre métricas de entrenamiento y validación  
-✅ **Solución productizada** con Streamlit minimalista  
-✅ **Informe de rendimiento** con MAE, RMSE e interpretación bayesiana  
+- [x] **Modelo ML funcional** que predice cantidad vendida (distribucion Poisson)  
+- [x] **EDA completo** con analisis de sobredispersion y patrones temporales  
+- [x] **Overfitting < 5%** entre metricas de entrenamiento y validacion  
+- [x] **Solucion productizada** con Streamlit minimalista  
+- [x] **Informe de rendimiento** con MAE, RMSE e interpretacion bayesiana  
 
-## 📊 Dataset y Variables
+## Dataset y Variables
 
-**Variable objetivo**: `quantity_sold` (distribución Poisson)
+**Variable objetivo**: `quantity_sold` (distribucion Poisson)
 
 **Variables predictoras**:
 - `discount_percent`: Porcentaje de descuento aplicado
-- `rating`: Calificación del producto (1-5)
-- `is_weekend`: Si la venta ocurrió en fin de semana (0/1)
-- `day_of_week`: Día de la semana (0=Lunes, 6=Domingo)
+- `rating`: Calificacion del producto (1-5)
+- `is_weekend`: Si la venta ocurrio en fin de semana (0/1)
+- `day_of_week`: Dia de la semana (0=Lunes, 6=Domingo)
 - `month`: Mes para capturar estacionalidad
-- `product_category`: Categorías convertidas a dummies
+- `product_category`: Categorias convertidas a dummies
 
-## 🚀 Instalación y Uso
+## Instalacion y Uso
 
 ### 1. Instalar dependencias
 ```bash
@@ -41,28 +49,28 @@ jupyter notebook 04_Modelo_Poisson_Bayesiano.ipynb
 streamlit run app_simple_modelo_4.py
 ```
 
-## 🧠 Metodología
+## Metodologia
 
 ### Modelo Poisson Bayesiano
-- **Distribución**: Poisson (ideal para conteos como quantity_sold)
+- **Distribucion**: Poisson (ideal para conteos como quantity_sold)
 - **Framework**: PyMC para inferencia bayesiana
-- **Variables**: discount_percent, rating, is_weekend + ingeniería temporal
+- **Variables**: discount_percent, rating, is_weekend + ingenieria temporal
 - **Priors**: Normal(0, 1) para coeficientes, intercept centrado en log(media)
-- **Función de enlace**: Log-link para garantizar predicciones positivas
+- **Funcion de enlace**: Log-link para garantizar predicciones positivas
 
-### Preparación de Datos
+### Preparacion de Datos
 - **Limpieza**: quantity_sold como entero ≥ 0
-- **Ingeniería temporal**: day_of_week, is_weekend, month desde order_date
-- **Codificación**: product_category a variables dummy
-- **Estandarización**: Variables continuas normalizadas
+- **Ingenieria temporal**: day_of_week, is_weekend, month desde order_date
+- **Codificacion**: product_category a variables dummy
+- **Estandarizacion**: Variables continuas normalizadas
 
-### Métricas de Evaluación
-- **MAE**: Mean Absolute Error (fácil interpretación para conteos)
+### Metricas de Evaluacion
+- **MAE**: Mean Absolute Error (facil interpretacion para conteos)
 - **RMSE**: Root Mean Square Error
-- **Análisis de sobredispersión**: Ratio varianza/media
+- **Analisis de sobredispersion**: Ratio varianza/media
 - **Control de overfitting**: Diferencia < 5% entre train/test
 
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 ├── 04_Modelo_Poisson_Bayesiano.ipynb    # Notebook principal (TODO incluido)
@@ -73,50 +81,50 @@ streamlit run app_simple_modelo_4.py
 └── README.md                           # Este archivo
 ```
 
-## 🔧 Archivos Generados
+## Archivos Generados
 
-Al ejecutar el notebook completo, se generan automáticamente:
-- `modelo_4_poisson_results.pkl`: Parámetros del modelo y métricas
-- `modelo_4_poisson_trace.pkl`: Trace completo de PyMC para análisis avanzado
+Al ejecutar el notebook completo, se generan automaticamente:
+- `modelo_4_poisson_results.pkl`: Parametros del modelo y metricas
+- `modelo_4_poisson_trace.pkl`: Trace completo de PyMC para analisis avanzado
 
-⚠️ **Nota**: Estos archivos son necesarios para la aplicación Streamlit pero no se incluyen en el repositorio.
+**Nota**: Estos archivos son necesarios para la aplicacion Streamlit pero no se incluyen en el repositorio.
 
-## 📋 Workflow Recomendado
+## Workflow Recomendado
 
 1. **Clonar repositorio**: `git clone <repo-url>`
 2. **Instalar dependencias**: `pip install -r requirements.txt`  
 3. **Ejecutar notebook**: `jupyter notebook 04_Modelo_Poisson_Bayesiano.ipynb`
 4. **Usar aplicación**: `streamlit run app_simple_modelo_4.py`
 
-## 🎯 Características del Modelo
+## Caracteristicas del Modelo
 
-### Análisis Exploratorio (EDA)
-- ✅ Histograma de quantity_sold (forma Poisson típica)
-- ✅ Análisis media/varianza para detectar sobredispersión  
-- ✅ Gráficos weekend vs quantity_sold
-- ✅ Correlaciones con descuentos y ratings
+### Analisis Exploratorio (EDA)
+- [x] Histograma de quantity_sold (forma Poisson tipica)
+- [x] Analisis media/varianza para detectar sobredispersion  
+- [x] Graficos weekend vs quantity_sold
+- [x] Correlaciones con descuentos y ratings
 
 ### Modelo Bayesiano
-- ✅ Distribución Poisson para conteos
-- ✅ Variables temporales (weekend, día, mes)
-- ✅ Interpretación de coeficientes (efectos multiplicativos)
-- ✅ Diagnósticos de convergencia (R-hat)
+- [x] Distribucion Poisson para conteos
+- [x] Variables temporales (weekend, dia, mes)
+- [x] Interpretacion de coeficientes (efectos multiplicativos)
+- [x] Diagnosticos de convergencia (R-hat)
 
 ### Tests Integrados
-- ✅ Validación de tipos de datos
-- ✅ Verificación de variables temporales
-- ✅ Control de convergencia del modelo
-- ✅ Análisis de overfitting < 5%
-- ✅ Validación de predicciones
+- [x] Validacion de tipos de datos
+- [x] Verificacion de variables temporales
+- [x] Control de convergencia del modelo
+- [x] Analisis de overfitting < 5%
+- [x] Validacion de predicciones
 
-## 📈 Resultados Esperados
+## Resultados Esperados
 
 - **MAE < 2.0**: Error promedio menor a 2 unidades
 - **Overfitting < 5%**: Modelo generalizable
 - **R-hat < 1.1**: Convergencia bayesiana adecuada
 - **Interpretabilidad**: Efectos claros de descuento y weekend
 
-## 🛠️ Tecnologías Utilizadas
+## Tecnologias Utilizadas
 
 - **PyMC**: Programación probabilística
 - **ArviZ**: Análisis bayesiano y diagnósticos
@@ -124,17 +132,17 @@ Al ejecutar el notebook completo, se generan automáticamente:
 - **Pandas/Polars**: Manipulación de datos
 - **Matplotlib/Seaborn**: Visualización
 
-## 🧪 Testing
+## Testing
 
 Tests integrados en el notebook principal:
-- ✅ Carga de datos correcta
-- ✅ Creación de variables temporales
-- ✅ Validación de quantity_sold (entero ≥ 0)
-- ✅ Convergencia del modelo (R-hat < 1.1)
-- ✅ Control de overfitting (< 5%)
-- ✅ Predicciones razonables (MAE < 2.0)
+- [x] Carga de datos correcta
+- [x] Creacion de variables temporales
+- [x] Validacion de quantity_sold (entero ≥ 0)
+- [x] Convergencia del modelo (R-hat < 1.1)
+- [x] Control de overfitting (< 5%)
+- [x] Predicciones razonables (MAE < 2.0)
 
-## 📚 Referencias
+## Referencias
 
 - [PyMC Documentation](https://docs.pymc.io/)
 - [Bayesian Analysis with Python](https://github.com/aloctavodia/BAP)
