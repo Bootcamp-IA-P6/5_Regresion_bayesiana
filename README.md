@@ -131,7 +131,7 @@ Estandarización: El eje X está estandarizado (centrado en 0), lo que facilita 
 
 
 ## Modelo Bayesiano Logistico 
-![Modelo Bayesiano Logistico 2 ]([img/ModeloLogistico2.(https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/modeloLogistico2.png?raw=true))
+![Modelo Bayesiano Logistico 2 ](https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/modeloLogistico2.png?raw=true))
 
 Eje Y - P(Best Seller): Representa la probabilidad de ser un "Súper Ventas". El valor varía de 0 a 1 (0% a 100%).
 
