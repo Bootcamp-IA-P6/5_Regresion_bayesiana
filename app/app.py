@@ -16,6 +16,7 @@ from src.modelo2_predict import load_model2, predict_bestseller_proba
 
 from src.modelo1_predict import load_model1
 
+from src.modelo3_predict import load_model3, predict_model3
 
 
 
@@ -63,6 +64,17 @@ def log_prediction(row: dict):
             writer.writeheader()
         writer.writerow(row)
 
+@st.cache_resource
+def _cached_load_model3():
+    """
+    Carga el modelo jerárquico desde el archivo .nc.
+    Devuelve:
+    - post: El objeto con las medias de los parámetros (interceptos y pendientes).
+    - cat_names: La lista de nombres de las categorías.
+    """
+    # Llamamos a la función que está en src/modelo3_predict.py
+    post, cat_names = load_model3(MODEL3_PATH)
+    return post, cat_names
 
 # -----------------------------
 # Tabs
@@ -194,10 +206,56 @@ with tab2:
 # -----------------------------
 # TAB 3 - Placeholder Modelo 3
 # -----------------------------
+# -----------------------------
+# TAB 3 - Modelo 3 Jerárquico
+# -----------------------------
+# -----------------------------
+# TAB 3 - Modelo 3 Jerárquico
+# -----------------------------
 with tab3:
-    st.subheader("🌍 Modelo 3 — Jerárquico por Región (Pendiente de integración)")
-    st.info(
-        "Este tab está preparado para integrar el Modelo 3.\n\n"
-        "Idea: seleccionar `customer_region` y mostrar estimaciones ajustadas (shrinkage). "
-        "Cuando Naizabyth exporte artefactos, los cargamos aquí."
-    )
+    st.subheader("🌍 Modelo 3 — Regresión Jerárquica por Categoría")
+
+    # 1. Definir la ruta del archivo .nc
+    MODEL3_PATH = "models/modelo3/modelo_jerarquico.nc" 
+
+    # 2. Verificar si existe el archivo antes de intentar cargarlo
+    if not os.path.exists(MODEL3_PATH):
+        st.error(f"No se encontró el artefacto del Modelo 3 en: `{MODEL3_PATH}`")
+        st.info("Asegúrate de que el archivo 'modelo_jerarquico.nc' esté en la carpeta 'models/modelo3/'.")
+    else:
+        # 3. CARGA: Obtenemos el objeto 'post3' (para cálculos) y 'cat_names' (para el selectbox)
+        post3, cat_names = _cached_load_model3()
+
+        with st.form("form_modelo3"):
+            st.info("Este modelo predice ingresos considerando el comportamiento específico (shrinkage) de cada categoría.")
+            
+            # Selector de categoría (La parte Jerárquica)
+            categoria_sel = st.selectbox("Selecciona la Categoría de Producto", options=cat_names)
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                p_scaled = st.number_input("Precio Escalado (price_scaled)", value=0.0, step=0.1, help="Valor del precio tras el StandardScaler")
+            with col2:
+                r_scaled = st.number_input("Rating Escalado (rating_scaled)", value=0.0, step=0.1, help="Valor del rating tras el StandardScaler")
+
+            submitted3 = st.form_submit_button("Calcular Predicción Jerárquica")
+
+        # 4. Lógica de resultados
+        if submitted3:
+            # CORRECCIÓN: Pasamos 'post3' como primer argumento para que la función tenga los datos
+            y_log, y_real = predict_model3(post3, categoria_sel, p_scaled, r_scaled)
+
+            # Mostrar resultado principal
+            st.metric("💰 Ingreso Estimado", f"${y_real:,.2f}")
+            
+            # Detalles técnicos para transparencia del modelo
+            with st.expander("Ver detalles del ajuste bayesiano"):
+                st.write(f"**Log-Revenue (Predicción base):** `{y_log:.4f}`")
+                
+                # Renderizado de la fórmula matemática
+                st.latex(rf"y_{{log}} = \alpha_{{{categoria_sel}}} + \beta_p \cdot x_p + \beta_r \cdot x_r")
+                
+                # CORRECCIÓN: Accedemos al intercepto usando el objeto 'post3' cargado
+                intercepto_cat = float(post3['a_cat'].sel(a_cat_dim_0=categoria_sel))
+                st.write(f"El intercepto calculado para **{categoria_sel}** es: `{intercepto_cat:.4f}`")
+                st.caption("Nota: Este valor incluye el efecto de 'shrinkage', ajustando la categoría hacia la media global si hay pocos datos.")
