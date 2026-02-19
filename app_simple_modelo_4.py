@@ -28,11 +28,11 @@ def predict_quantity(discount, rating, is_weekend, model_params):
     discount_scaled = (discount - model_params['X_discount_mean']) / model_params['X_discount_std']
     rating_scaled = (rating - model_params['X_rating_mean']) / model_params['X_rating_std']
     
-    # Calcular predicción
-    log_mu = (model_params['intercept'] + 
-              model_params['beta_discount'] * discount_scaled + 
-              model_params['beta_rating'] * rating_scaled + 
-              model_params['beta_weekend'] * is_weekend)
+    # Calcular predicción usando los nombres correctos
+    log_mu = (model_params['intercept_mean'] + 
+              model_params['discount_coef_mean'] * discount_scaled + 
+              model_params['rating_coef_mean'] * rating_scaled + 
+              model_params['weekend_coef_mean'] * is_weekend)
     
     return np.exp(log_mu)
 
