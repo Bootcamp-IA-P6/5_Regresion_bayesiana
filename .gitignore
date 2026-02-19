@@ -205,3 +205,20 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,windows
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+
+# Datos (no subir datasets)
+data/raw/
+dataset/
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
