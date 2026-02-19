@@ -14,6 +14,9 @@ from src.modelo2_predict import load_model2, predict_bestseller_proba
 
 from src.modelo2_predict import load_model2, predict_bestseller_proba
 
+from src.modelo1_predict import load_model1
+
+
 
 
 # -----------------------------
@@ -34,10 +37,17 @@ SCALER_PATH = "models/modelo2/modelo2_scaler.joblib"
 
 LOG_PATH = "reports/predictions_log.csv"
 
+MODEL1_PATH = "models/modelo1/modelo_ingresos_bayesian.joblib"   # AJUSTA este nombre al archivo real
+
 
 # -----------------------------
 # Helpers
 # -----------------------------
+@st.cache_resource
+def _cached_load_model1():
+    return load_model1(MODEL1_PATH)
+
+
 @st.cache_resource
 def _cached_load_model2():
     return load_model2(TRACE_PATH, SCALER_PATH)
@@ -61,17 +71,72 @@ tab1, tab2, tab3 = st.tabs(["📈 Modelo 1 (Regresión)", "⭐ Modelo 2 (Best Se
 
 
 # -----------------------------
-# TAB 1 - Placeholder Modelo 1
+# TAB 1 - Modelo 1
 # -----------------------------
 with tab1:
-    st.subheader("📈 Modelo 1 — Regresión Lineal Bayesiana (Pendiente de integración)")
-    st.info(
-        "Este tab está preparado para integrar el Modelo 1.\n\n"
-        "Recomendación: exportar el modelo (joblib/pkl) y crear una función `predict_modelo1()` en `src/`."
-    )
+    st.subheader("📈 Modelo 1 — Regresión Bayesiana (Ingresos)")
+
+    if not os.path.exists(MODEL1_PATH):
+        st.error(
+            "No se encontró el artefacto del Modelo 1.\n\n"
+            f"Ruta esperada: `{MODEL1_PATH}`"
+        )
+    else:
+        model1 = _cached_load_model1()
+
+        # -------- FORMULARIO --------
+        with st.form("form_modelo1"):
+
+            st.info(
+                "Este modelo utiliza una Regresión Lineal Bayesiana. "
+                "La variable de entrada se estandariza utilizando los parámetros "
+                "del entrenamiento y luego se calcula el ingreso estimado "
+                "mediante los coeficientes alpha y beta aprendidos."
+            )
+
+            x_input = st.number_input(
+                "Precio usado por el modelo (price/discounted_price)",
+                min_value=0.01,
+                value=200.0,
+                step=1.0
+            )
+
+            submitted1 = st.form_submit_button("Predecir ingreso")
+
+        # -------- RESULTADOS --------
+        if submitted1:
+            from src.modelo1_predict import predict_model1_from_export
+
+            y_pred = predict_model1_from_export(model1, price=x_input)
+
+            st.metric("💰 Ingreso estimado (predicción)", f"{y_pred:,.2f}")
+
+            # Mostrar fórmula
+            st.caption("Fórmula utilizada:")
+            st.latex(r"y = \alpha + \beta \cdot \frac{(x - \mu)}{\sigma}")
+
+            # Mostrar métricas guardadas
+            metricas = model1.get("metricas", {})
+            if metricas:
+                st.write("📌 Métricas guardadas en el artefacto:")
+                st.json(metricas)
+
+            # -------- SIMULACIÓN --------
+            st.divider()
+            st.subheader("🔎 Simulación de escenario")
+
+            if st.checkbox("Simular aumento del 10% en el precio"):
+                nuevo_precio = x_input * 1.10
+                nuevo_pred = predict_model1_from_export(model1, price=nuevo_precio)
+
+                st.metric(
+                    "Ingreso estimado con +10% precio",
+                    f"{nuevo_pred:,.2f}",
+                    delta=f"{nuevo_pred - y_pred:,.2f}"
+                )
 
 
-# -----------------------------
+# -----------------------------w
 # TAB 2 - Modelo 2 funcional
 # -----------------------------
 with tab2:
