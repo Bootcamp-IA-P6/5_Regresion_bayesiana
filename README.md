@@ -43,10 +43,8 @@ Utilizamos librerías de alto rendimiento para el manejo de datos y computación
 
 El desarrollo se dividió en las siguientes fases técnicas:Carga de Datos: Implementada con polars para garantizar eficiencia en la lectura y preprocesamiento.Definición del Prior: Selección de distribuciones a priori (Normal, Half-Cauchy, etc.) basadas en conocimiento experto o criterios no informativos.Muestreo (Inferencia): Ejecución del algoritmo NUTS (No-U-Turn Sampler) para obtener las distribuciones posteriores.Validación: Uso de arviz para verificar la convergencia mediante el indicador $\hat{R}$ (R-hat) y el tamaño efectivo de la muestra (ESS).Serialización: Guardado de los trazos y modelos resultantes mediante joblib para su posterior uso sin necesidad de re-entrenar.
 
-Gemini ha dicho
-¡Claro que sí! Un buen README es la cara de tu proyecto; debe ser profesional pero lo suficientemente claro para que cualquiera (o tú mismo en seis meses) entienda qué está pasando.
 
-Aquí tienes una propuesta estructurada, limpia y con un toque de estilo para tu proyecto de Modelado Bayesiano.
+
 
 📊 Proyecto de Modelado Bayesiano con PyMC
 Este repositorio contiene una implementación avanzada de modelos estadísticos bajo el enfoque bayesiano, utilizando PyMC para el muestreo y ArviZ para el análisis de diagnósticos y visualización de resultados.
@@ -60,11 +58,10 @@ Regresión Logística Bayesiana: Para problemas de clasificación y probabilidad
 Modelo Jerárquico (Multinivel): Para capturar la variabilidad en diferentes niveles de agrupación de los datos, permitiendo el "intercambio de información" entre grupos.
 
 🚀 Guía de Inicio Rápido
-Sigue estos pasos para replicar el entorno de desarrollo y ejecutar los modelos.
+
 
 ## Estructura de Carpetas 
-
-![Descripción del gráfico](img/estructura.png)
+![Estructura del modelo](https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/Estructura.png?raw=true)
 
 
 
@@ -118,12 +115,11 @@ Jerárquico	Datos agrupados o anidados.	Estima parámetros globales y locales si
 
 ## Modelo Bayesiano Lineal 
 
-![Modelo Bayesiano Lineal 1 ](img/ModelolinealBayesiano1.png)
+![Modelo Bayesiano Lineal 1](https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/ModeloLinealBayesiano1.png?raw=true)
 
 📈 Regresión Lineal Bayesiana: Interpretación de Resultados
 Un Modelo Bayesiano Lineal estima la relación entre una variable dependiente (Ingreso Total) y una independiente (Precio Descontado) utilizando distribuciones de probabilidad. A diferencia de la regresión tradicional que te da una sola línea "fija", aquí obtenemos todo un rango de posibilidades que cuantifican nuestra incertidumbre.
 
-Respecto a la imagen generada:
 
 Línea Roja (Media de la Regresión): Representa el valor más probable de la relación. Indica que a medida que el precio descontado (estandarizado) aumenta, el ingreso total tiende a subir siguiendo esta trayectoria central.
 
@@ -135,7 +131,7 @@ Estandarización: El eje X está estandarizado (centrado en 0), lo que facilita 
 
 
 ## Modelo Bayesiano Logistico 
-![Modelo Bayesiano Logistico 2 ](img/ModeloLogistico2.png)
+![Modelo Bayesiano Logistico 2 ]([img/ModeloLogistico2.png](https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/modeloLogistico2.png?raw=true))
 
 Eje Y - P(Best Seller): Representa la probabilidad de ser un "Súper Ventas". El valor varía de 0 a 1 (0% a 100%).
 
@@ -151,7 +147,7 @@ A diferencia de los modelos tradicionales, el uso de PyMC nos permite visualizar
 
 
 ## Modelo Jerarquico Bayesiano 
-![Modelo Bayesiano Jerarquico 3 ](img/ModeloJerarquico3.png)
+![Modelo Bayesiano Jerarquico 3 ]([img/ModeloJerarquico3.png](https://github.com/Bootcamp-IA-P6/5_Regresion_bayesiana/blob/develop/img/ModeloJerarquico3.png?raw=true))
 
 🏛️ Modelo Bayesiano Jerárquico (Multinivel)
 El objetivo de este modelo es capturar la estructura anidada de los datos. En lugar de asumir que todas las categorías se comportan igual, permitimos que cada una tenga su propio intercepto, pero compartiendo una distribución común ("hiperprior").
