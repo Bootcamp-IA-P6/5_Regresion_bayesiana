@@ -18,6 +18,8 @@ from src.modelo1_predict import load_model1
 
 from src.modelo3_predict import load_model3, predict_model3
 
+from src.modelo4_predict import load_model4, predict_model4_quantity
+
 
 
 # -----------------------------
@@ -39,6 +41,9 @@ SCALER_PATH = "models/modelo2/modelo2_scaler.joblib"
 LOG_PATH = "reports/predictions_log.csv"
 
 MODEL1_PATH = "models/modelo1/modelo_ingresos_bayesian.joblib"   # AJUSTA este nombre al archivo real
+
+MODEL4_TRACE_PATH = "models/modelo4/modelo4_trace.nc"
+MODEL4_SCALER_PATH = "models/modelo4/modelo4_scaler.joblib"
 
 
 # -----------------------------
@@ -76,10 +81,14 @@ def _cached_load_model3():
     post, cat_names = load_model3(MODEL3_PATH)
     return post, cat_names
 
+@st.cache_resource
+def _cached_load_model4():
+    return load_model4(MODEL4_TRACE_PATH, MODEL4_SCALER_PATH)
+
 # -----------------------------
 # Tabs
 # -----------------------------
-tab1, tab2, tab3 = st.tabs(["📈 Modelo 1 (Regresión)", "⭐ Modelo 2 (Best Seller)", "🌍 Modelo 3 (Jerárquico)"])
+tab1, tab2, tab3, tab4 = st.tabs(["📈 Modelo 1 (Regresión)", "⭐ Modelo 2 (Best Seller)", "🌍 Modelo 3 (Jerárquico)", "📊 Modelo 4 (Poisson)"])
 
 
 # -----------------------------
@@ -259,3 +268,89 @@ with tab3:
                 intercepto_cat = float(post3['a_cat'].sel(a_cat_dim_0=categoria_sel))
                 st.write(f"El intercepto calculado para **{categoria_sel}** es: `{intercepto_cat:.4f}`")
                 st.caption("Nota: Este valor incluye el efecto de 'shrinkage', ajustando la categoría hacia la media global si hay pocos datos.")
+
+# -----------------------------
+# TAB 4 - Modelo 4 (Poisson)
+# -----------------------------
+with tab4:
+    st.subheader("📊 Modelo 4 — Regresión Poisson Bayesiana (Cantidad Vendida)")
+    
+    # Validación de artefactos
+    if not (os.path.exists(MODEL4_TRACE_PATH) and os.path.exists(MODEL4_SCALER_PATH)):
+        st.error(
+            "No se encontraron los artefactos del Modelo 4.\n\n"
+            f"- Trace esperado: `{MODEL4_TRACE_PATH}`\n"
+            f"- Scaler esperado: `{MODEL4_SCALER_PATH}`\n\n"
+            "Ejecuta el notebook 04_modelo4_poisson.ipynb para generar los artefactos."
+        )
+    else:
+        trace, scaler_data, params = _cached_load_model4()
+
+        with st.form("form_modelo4"):
+            st.info("Este modelo utiliza una **Regresión Poisson Bayesiana** para predecir la cantidad vendida.")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                discount_percent = st.slider("Descuento (%)", min_value=0.0, max_value=100.0, value=15.0, step=1.0)
+                rating = st.slider("Rating del producto", min_value=0.0, max_value=5.0, value=4.0, step=0.1)
+            
+            with col2:
+                is_weekend = st.selectbox(
+                    "Día de la semana", 
+                    options=[0, 1],
+                    format_func=lambda x: "Fin de semana" if x == 1 else "Día laboral", 
+                    index=0
+                )
+
+            submitted4 = st.form_submit_button("Predecir cantidad vendida")
+
+        if submitted4:
+            pred_quantity = predict_model4_quantity(
+                discount_percent, rating, is_weekend, scaler_data, params
+            )
+            
+            st.metric("📦 Cantidad vendida estimada", f"{pred_quantity:.2f} unidades")
+
+            # Mostrar fórmula
+            st.caption("Fórmula utilizada:")
+            st.latex(r"\lambda = \exp(\alpha + \beta_1 \cdot discount_{scaled} + \beta_2 \cdot rating_{scaled} + \beta_3 \cdot weekend)")
+
+            # Mostrar métricas guardadas  
+            metrics = scaler_data.get("metrics", {})
+            if metrics:
+                st.write("📌 Métricas del modelo:")
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.write("**Entrenamiento:**")
+                    st.write(f"- MAE: {metrics.get('mae_train', 0):.3f}")
+                    st.write(f"- RMSE: {metrics.get('rmse_train', 0):.3f}")
+                
+                with col2:
+                    st.write("**Prueba:**")
+                    st.write(f"- MAE: {metrics.get('mae_test', 0):.3f}")
+                    st.write(f"- RMSE: {metrics.get('rmse_test', 0):.3f}")
+
+            # Mostrar efectos si están disponibles
+            effects = scaler_data.get("effects", {})
+            if effects:
+                st.divider()
+                st.subheader("🔍 Efectos Multiplicativos")
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    discount_effect = effects.get('discount_effect', 1.0)
+                    st.metric("Efecto Descuento", f"×{discount_effect:.3f}", 
+                             delta=f"{(discount_effect-1)*100:+.1f}%")
+                
+                with col2:
+                    rating_effect = effects.get('rating_effect', 1.0)
+                    st.metric("Efecto Rating", f"×{rating_effect:.3f}", 
+                             delta=f"{(rating_effect-1)*100:+.1f}%")
+                
+                with col3:
+                    weekend_effect = effects.get('weekend_effect', 1.0)
+                    st.metric("Efecto Weekend", f"×{weekend_effect:.3f}", 
+                             delta=f"{(weekend_effect-1)*100:+.1f}%")
