@@ -2,6 +2,7 @@ import os
 import csv
 from datetime import datetime
 
+
 import streamlit as st
 
 import sys
@@ -25,13 +26,6 @@ from src.modelo3_predict import load_model3, predict_model3
 # -----------------------------
 st.set_page_config(page_title="Amazon Sales - Modelos Bayesianos", layout="centered")
 
-def load_css(file_name):
-    with open(file_name, "r") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
-# Solo se carga si el archivo existe para evitar errores
-if os.path.exists("style.css"):
-    load_css("style.css")
 
 st.title("Amazon Sales — Modelos Bayesianos (MVP)")
 st.write(
