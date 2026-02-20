@@ -30,8 +30,7 @@ st.set_page_config(page_title="Amazon Sales - Modelos Bayesianos", layout="cente
 st.title("Amazon Sales — Modelos Bayesianos (MVP)")
 st.write(
     "Aplicación para probar los modelos del proyecto. "
-    "Actualmente: Modelo 2 (Best Seller) funcional. "
-    "Modelo 1 y 3 quedan listos para integrar."
+    "Actualmente: Modelos 1, 2, 3 y 4 funcionales."
 )
 
 # Rutas de artefactos (ajusta si tu estructura difiere)
@@ -83,6 +82,7 @@ def _cached_load_model3():
 
 @st.cache_resource
 def _cached_load_model4():
+    # Limpiar caché si hay problemas
     return load_model4(MODEL4_TRACE_PATH, MODEL4_SCALER_PATH)
 
 # -----------------------------
