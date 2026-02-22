@@ -9,4 +9,6 @@ COPY . .
 
 EXPOSE 8501
 
+# EXTREMADAMENTE IMPORTANTE:
+# Ejecutamos desde la raíz pero apuntamos al archivo dentro de /app
 CMD ["streamlit", "run", "app/app.py", "--server.port=8501", "--server.address=0.0.0.0"]

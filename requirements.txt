@@ -105,3 +105,4 @@ wcwidth==0.6.0
 widgetsnbextension==4.0.15
 xarray==2026.1.0
 xarray-einstats==0.9.1
+pymongo

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      # ESTA LÍNEA ES LA CLAVE: le dice a Python que mire en la raíz
+      - PYTHONPATH=/app 
+    depends_on:
+      - mongodb
+    ports:
+      - "8501:8501"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_shonos # Le ponemos nombre fijo para que la IA lo encuentre
+    ports:
+      - "27017:27017"
+    volumes:
+      - datos_de_mongo:/data/db
+
+volumes:
+  datos_de_mongo:
