@@ -5,6 +5,16 @@ import pandas as pd
 import streamlit as st
 from datetime import datetime
 
+# Mapeo de IDs numéricos a nombres legibles para el usuario
+DICCIONARIO_CATEGORIAS = {
+    0: "Beauty",
+    1: "Books",
+    2: "Electronics",
+    3: "Fashion ",
+    4: "Home & Kitchen",
+    5: "Sports"
+}
+
 # Añadimos el path para imports locales
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
@@ -80,23 +90,35 @@ with tab2:
             registrar_prediccion("Modelo 2 - Best Seller", {"rating": rating, "price": discounted_price}, {"p_mean": p_mean})
 
 # --- TAB 3: MODELO 3 (JERÁRQUICO) ---
+# --- TAB 3: MODELO 3 (JERÁRQUICO) ---
 with tab3:
     st.subheader("🌍 Modelo 3 — Regresión Jerárquica")
     if not os.path.exists(MODEL3_PATH):
         st.error("No se encontró el artefacto del Modelo 3.")
     else:
         post3, cat_names = _cached_load_model3()
+        
         with st.form("form_modelo3"):
-            categoria_sel = st.selectbox("Categoría de Producto", options=cat_names)
+            # Usamos format_func para que el usuario vea el nombre pero el modelo reciba el ID
+            categoria_sel = st.selectbox(
+                "Categoría de Producto", 
+                options=list(DICCIONARIO_CATEGORIAS.keys()),
+                format_func=lambda x: DICCIONARIO_CATEGORIAS.get(x, f"Categoría {x}")
+            )
+            
             p_scaled = st.number_input("Precio Escalado", value=0.0, step=0.1)
             r_scaled = st.number_input("Rating Escalado", value=0.0, step=0.1)
             submitted3 = st.form_submit_button("Calcular Predicción Jerárquica")
 
         if submitted3:
+            # Aquí 'categoria_sel' ya es el número (0, 1, 2...) que tu modelo entiende
             y_log, y_real = predict_model3(post3, categoria_sel, p_scaled, r_scaled)
+            
             st.metric("💰 Ingreso Estimado", f"${y_real:,.2f}")
-            registrar_prediccion("Modelo 3 - Jerárquico", {"cat": categoria_sel, "p": p_scaled}, {"y_real": y_real})
-
+            
+            # Guardamos en la DB el nombre legible para que el historial sea útil
+            nombre_cat = DICCIONARIO_CATEGORIAS.get(categoria_sel, str(categoria_sel))
+            registrar_prediccion("Modelo 3 - Jerárquico", {"cat": nombre_cat, "p": p_scaled}, {"y_real": y_real})
 # -----------------------------
 # MONITOREO Y HISTORIAL (MLOps)
 # -----------------------------
