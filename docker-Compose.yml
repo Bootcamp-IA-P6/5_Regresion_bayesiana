@@ -1,0 +1,40 @@
+services:
+  # 1. El servicio de tu aplicación (Streamlit)
+  app:
+    build: .
+    container_name: amazon_app_bayesian
+    environment:
+      - MONGO_URI=mongodb://mongodb_shonos:27017/
+      - PYTHONPATH=/app
+    depends_on:
+      - mongodb
+    ports:
+      - "8501:8501"
+    volumes:
+      - .:/app  # Sincroniza tu código local con el contenedor
+
+  # 2. La base de datos
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb_shonos
+    ports:
+      - "27017:27017"
+    volumes:
+      - datos_de_mongo:/data/db
+
+  # 3. El servicio de Test (usa la misma imagen que 'app')
+  tester:
+    build: .
+    environment:
+      - MONGO_URI=mongodb://mongodb_shonos:27017/
+      - PYTHONPATH=/app
+    depends_on:
+      - mongodb
+    # Aquí es donde le decimos que NO abra Streamlit, sino Pytest
+    command: pytest tests/
+    volumes:
+      - .:/app
+
+# Definición de volúmenes persistentes
+volumes:
+  datos_de_mongo:
